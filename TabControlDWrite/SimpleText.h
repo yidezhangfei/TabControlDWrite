@@ -1,0 +1,51 @@
+#pragma once
+
+class SimpleText
+{
+public:
+  SimpleText();
+  ~SimpleText();
+
+  HRESULT Initialize(HWND hwndParent);
+
+  HWND  GetHwnd() { return hwnd_; }
+
+private:
+  HRESULT CreateDeviceIndependentResources();
+
+  void DiscardDeviceIndependentResources();
+
+  HRESULT CreateDeviceResources();
+
+  void DiscardDeviceResources();
+
+  HRESULT DrawD2DContent();
+
+  HRESULT DrawText();
+
+  void OnResize(UINT width, UINT height);
+
+  static LRESULT CALLBACK WndProc(HWND hWnd,
+    UINT message,
+    WPARAM wParam,
+    LPARAM lParam);
+
+private:
+  HWND hwnd_;
+
+  // how much to scale a design that assumes 96-dpi pixels
+  float dpiScaleX_;
+  float dpiScaleY_;
+
+  // Direct2D
+  ID2D1Factory* pD2DFactory_;
+  ID2D1HwndRenderTarget* pRT_;
+  ID2D1SolidColorBrush* pBlackBrush_;
+
+  // DirectWrite
+  IDWriteFactory* pDWriteFactory_;
+  IDWriteTextFormat* pTextFormat_;
+
+  const wchar_t* wszText_;
+  UINT32 cTextLength_;
+};
